@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="water" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#65C7E8"/>
+      <stop offset="100%" stop-color="#2F9EC4"/>
+    </linearGradient>
+    <radialGradient id="sun" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0%" stop-color="#FFD45C" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#FFD45C" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="800" height="600" fill="url(#water)"/>
+  <circle cx="680" cy="80" r="160" fill="url(#sun)"/>
+  <ellipse cx="120" cy="90" rx="140" ry="50" fill="#65BD48" opacity="0.5"/>
+  <ellipse cx="620" cy="520" rx="180" ry="60" fill="#228B45" opacity="0.5"/>
+  <ellipse cx="360" cy="560" rx="200" ry="55" fill="#228B45" opacity="0.45"/>
+  <g transform="translate(140,180) scale(0.8)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <path d="M 100 30 C 160 30 180 80 180 130 C 180 170 150 180 100 180 C 40 180 20 160 20 130 C 20 70 40 30 100 30 Z" fill="#4FAE3F" opacity="0.85"/>
+  <path d="M 100 30 L 100 180" stroke="#2E7D32" stroke-width="4" opacity="0.5"/>
+  <path d="M 35 90 L 165 130 M 40 120 L 160 95" stroke="#2E7D32" stroke-width="3" opacity="0.35"/>
+</svg></g>
+<g transform="translate(300,300) scale(0.6)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <path d="M 100 30 C 160 30 180 80 180 130 C 180 170 150 180 100 180 C 40 180 20 160 20 130 C 20 70 40 30 100 30 Z" fill="#4FAE3F" opacity="0.85"/>
+  <path d="M 100 30 L 100 180" stroke="#2E7D32" stroke-width="4" opacity="0.5"/>
+  <path d="M 35 90 L 165 130 M 40 120 L 160 95" stroke="#2E7D32" stroke-width="3" opacity="0.35"/>
+</svg></g>
+<g transform="translate(520,200) scale(0.7)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <path d="M 100 30 C 160 30 180 80 180 130 C 180 170 150 180 100 180 C 40 180 20 160 20 130 C 20 70 40 30 100 30 Z" fill="#4FAE3F" opacity="0.85"/>
+  <path d="M 100 30 L 100 180" stroke="#2E7D32" stroke-width="4" opacity="0.5"/>
+  <path d="M 35 90 L 165 130 M 40 120 L 160 95" stroke="#2E7D32" stroke-width="3" opacity="0.35"/>
+</svg></g>
+<g transform="translate(660,360) scale(0.6)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <path d="M 100 30 C 160 30 180 80 180 130 C 180 170 150 180 100 180 C 40 180 20 160 20 130 C 20 70 40 30 100 30 Z" fill="#4FAE3F" opacity="0.85"/>
+  <path d="M 100 30 L 100 180" stroke="#2E7D32" stroke-width="4" opacity="0.5"/>
+  <path d="M 35 90 L 165 130 M 40 120 L 160 95" stroke="#2E7D32" stroke-width="3" opacity="0.35"/>
+</svg></g>
+<g transform="translate(240,440) scale(0.7)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <path d="M 100 30 C 160 30 180 80 180 130 C 180 170 150 180 100 180 C 40 180 20 160 20 130 C 20 70 40 30 100 30 Z" fill="#4FAE3F" opacity="0.85"/>
+  <path d="M 100 30 L 100 180" stroke="#2E7D32" stroke-width="4" opacity="0.5"/>
+  <path d="M 35 90 L 165 130 M 40 120 L 160 95" stroke="#2E7D32" stroke-width="3" opacity="0.35"/>
+</svg></g>
+<g transform="translate(470,120) scale(0.55)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <path d="M 100 30 C 160 30 180 80 180 130 C 180 170 150 180 100 180 C 40 180 20 160 20 130 C 20 70 40 30 100 30 Z" fill="#4FAE3F" opacity="0.85"/>
+  <path d="M 100 30 L 100 180" stroke="#2E7D32" stroke-width="4" opacity="0.5"/>
+  <path d="M 35 90 L 165 130 M 40 120 L 160 95" stroke="#2E7D32" stroke-width="3" opacity="0.35"/>
+</svg></g>
+  <ellipse cx="400" cy="300" rx="60" ry="14" fill="#ffffff" opacity="0.12"/>
+  <ellipse cx="180" cy="420" rx="45" ry="10" fill="#ffffff" opacity="0.10"/>
+  <ellipse cx="620" cy="180" rx="50" ry="11" fill="#ffffff" opacity="0.12"/>
+</svg>

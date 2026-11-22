@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Rana frog_03">
+  <ellipse cx="52" cy="168" rx="30" ry="20" fill="#FFD45C" stroke="#00000022" stroke-width="2"/>
+  <ellipse cx="148" cy="168" rx="30" ry="20" fill="#FFD45C" stroke="#00000022" stroke-width="2"/>
+  <ellipse cx="100" cy="112" rx="56" ry="50" fill="#FFD45C" stroke="#00000022" stroke-width="2"/>
+  <ellipse cx="100" cy="132" rx="34" ry="26" fill="#FFF3C4"/>
+  <circle cx="70" cy="62" r="23" fill="#FFD45C" stroke="#00000022" stroke-width="2"/>
+  <circle cx="130" cy="62" r="23" fill="#FFD45C" stroke="#00000022" stroke-width="2"/>
+  <circle cx="70" cy="62" r="12" fill="#ffffff"/>
+  <circle cx="130" cy="62" r="12" fill="#ffffff"/>
+  <circle cx="70" cy="64" r="6" fill="#1a1a1a"/>
+  <circle cx="130" cy="64" r="6" fill="#1a1a1a"/>
+  <circle cx="73" cy="60" r="2.5" fill="#ffffff"/>
+  <circle cx="133" cy="60" r="2.5" fill="#ffffff"/>
+  <path d="M 88 72 Q 96 92 86 112" stroke="#1B1B1B" stroke-width="7" fill="none" stroke-linecap="round"/>
+<path d="M 104 70 Q 112 92 102 116" stroke="#1B1B1B" stroke-width="7" fill="none" stroke-linecap="round"/>
+  <circle cx="58" cy="112" r="8" fill="#FF9FB0" opacity="0.65"/>
+  <circle cx="142" cy="112" r="8" fill="#FF9FB0" opacity="0.65"/>
+  <path d="M 78 122 Q 100 138 122 122" stroke="#1a1a1a" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <ellipse cx="58" cy="162" rx="14" ry="9" fill="#FFD45C" stroke="#00000022" stroke-width="2"/>
+  <ellipse cx="142" cy="162" rx="14" ry="9" fill="#FFD45C" stroke="#00000022" stroke-width="2"/>
+</svg>
