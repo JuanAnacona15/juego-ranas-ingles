@@ -109,8 +109,9 @@ Todo el motor está en `src/game/gameLogic.js` (funciones puras, sin UI):
 
 - **`DIFFICULTIES`** — número de hojas y descripción de cada nivel.
 - **`generateTrack`** — distribución de hojas (porcentajes de verde/morada/roja/azul/amarilla).
-- **`resolveMove`** — efectos de aterrizaje: morada retrocede 2, roja pierde 2 turnos,
-  azul pregunta extra, amarilla impulso, y las reglas de encadenamiento/victoria.
+- **`applyMove`** — efecto de cada hoja según el resultado de la respuesta: morada
+  retrocede 2 si fallas, roja pierde 2 turnos si fallas, azul da pregunta extra si
+  aciertas, amarilla avanza 2 si aciertas.
 
 El flujo de turnos vive en `src/game/gameReducer.js`.
 
@@ -118,13 +119,15 @@ El flujo de turnos vive en `src/game/gameReducer.js`.
 
 ## 🎨 Reglas rápidas de las hojas
 
-| Hoja | Efecto |
-|------|--------|
-| 🟢 Verde (normal) | Sin efecto. |
-| 🟣 Morada (trampa) | Retrocede dos hojas. |
-| 🔴 Roja (penalización) | Pierde los dos próximos turnos. |
-| 🔵 Azul (bonus) | Pregunta extra inmediata. |
-| 🟡 Amarilla (impulso) | Avanza una hoja adicional. |
+El efecto de cada hoja se aplica según el resultado de tu respuesta **mientras estás parado sobre ella**:
+
+| Hoja | Si aciertas | Si fallas |
+|------|-------------|-----------|
+| 🟢 Verde (normal) | Avanzas 1 | Te quedas |
+| 🟣 Morada (trampa) | Avanzas 1 | Retrocedes 2 |
+| 🔴 Roja (penalización) | Avanzas 1 | Te quedas y pierdes 2 turnos |
+| 🔵 Azul (bonus) | Avanzas 1 + pregunta extra | Te quedas |
+| 🟡 Amarilla (impulso) | Avanzas 2 | Te quedas |
 
 La meta siempre es verde. La casilla inicial no tiene efecto.
 

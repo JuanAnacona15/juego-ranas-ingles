@@ -5,7 +5,8 @@ import {
   generateTrack,
   createDeck,
   drawQuestion,
-  resolveMove,
+  applyMove,
+  currentLeaf,
 } from './gameLogic.js';
 
 export function createInitialState({ difficulty, players }) {
@@ -35,7 +36,7 @@ export function createInitialState({ difficulty, players }) {
     currentQuestion: null,
     phase: 'question', // 'question' | 'feedback' | 'penalty'
     questionAnswered: false,
-    lastAnswer: null, // { selectedIndex, correct, correctIndex }
+    lastAnswer: null, // { selectedIndex, correct, correctIndex, leaf }
     bonusActive: false,
     penaltyMessage: null,
     winner: null,
@@ -95,22 +96,17 @@ function handleAnswer(state, selectedIndex) {
   if (correct) player.correctAnswers += 1;
   else player.incorrectAnswers += 1;
 
-  let bonusActive = false;
+  const leaf = currentLeaf(state.leaves, player.position);
+  const res = applyMove(state.leaves, player.position, correct);
+  player.position = res.position;
+  player.skippedTurns += res.skipped;
+
+  let bonusActive = res.bonus;
   let winner = null;
   let status = state.status;
-  let landedOn = null;
-
-  if (correct) {
-    const oldPos = player.position;
-    const res = resolveMove(state.leaves, oldPos + 1);
-    player.position = res.position;
-    player.skippedTurns += res.skipped;
-    bonusActive = res.bonus;
-    landedOn = res.win ? 'goal' : state.leaves[oldPos];
-    if (res.win) {
-      winner = player.id;
-      status = 'finished';
-    }
+  if (res.win) {
+    winner = player.id;
+    status = 'finished';
   }
 
   return {
@@ -120,7 +116,7 @@ function handleAnswer(state, selectedIndex) {
     players,
     phase: 'feedback',
     questionAnswered: true,
-    lastAnswer: { selectedIndex, correct, correctIndex: q.correctAnswer, landedOn },
+    lastAnswer: { selectedIndex, correct, correctIndex: q.correctAnswer, leaf },
     bonusActive,
     penaltyMessage: null,
   };

@@ -32,10 +32,10 @@ export const DIFFICULTIES = {
 // ---------------------------------------------------------------------------
 export const LEAF_TYPES = {
   green: { key: 'green', label: 'Normal', color: '#65BD48', effect: 'No effect.' },
-  purple: { key: 'purple', label: 'Trap', color: '#A66DD4', effect: 'Go back two leaves.' },
-  red: { key: 'red', label: 'Penalty', color: '#ED6464', effect: 'Lose your next two turns.' },
-  blue: { key: 'blue', label: 'Bonus', color: '#65C7E8', effect: 'Answer one extra question.' },
-  yellow: { key: 'yellow', label: 'Boost', color: '#FFD45C', effect: 'Advance one extra leaf.' },
+  purple: { key: 'purple', label: 'Trap', color: '#A66DD4', effect: 'If you fail here, go back two leaves.' },
+  red: { key: 'red', label: 'Penalty', color: '#ED6464', effect: 'If you fail here, lose your next two turns.' },
+  blue: { key: 'blue', label: 'Bonus', color: '#65C7E8', effect: 'If you answer correctly here, get an extra question.' },
+  yellow: { key: 'yellow', label: 'Boost', color: '#FFD45C', effect: 'If you answer correctly here, advance two leaves.' },
 };
 
 // ---------------------------------------------------------------------------
@@ -133,54 +133,38 @@ export function drawQuestion(state) {
 }
 
 // ---------------------------------------------------------------------------
-// Movimiento y efectos de hojas
+// Movimiento y efectos de hoja (según el resultado de la respuesta)
 // ---------------------------------------------------------------------------
-// Resuelve el aterrizaje en `startPos` y todas las cadenas de efectos.
+// La hoja en la que está parado el jugador decide la consecuencia de su respuesta.
 // Posiciones: 0 = casilla inicial, 1..totalLeaves = hojas (leaves[0..N-1]).
 // La meta es la posición `totalLeaves` (la última hoja).
-// Devuelve: { position, win, skipped, bonus }
-// - skipped: turnos que pierde el jugador (hoja roja)
-// - bonus: si el jugador ganó una pregunta extra (hoja azul)
-// Reglas:
-// - El retroceso morado NO activa otros efectos.
-// - Una misma hoja especial no se activa dos veces en un mismo movimiento.
-// - La resolución encadenada está limitada a la longitud de la pista.
-export function resolveMove(leaves, startPos) {
-  const totalLeaves = leaves.length;
-  const goal = totalLeaves; // alcanzar o superar esta posición = victoria
-  let pos = startPos;
-  const visited = new Set();
+// - Correcta: avanza 1 hoja (2 si está sobre amarilla) y gana bonus si está sobre azul.
+// - Incorrecta: retrocede 2 si está sobre morada, pierde 2 turnos si está sobre roja,
+//   o se queda quieto en el resto.
+
+// Hoja en la que está parado el jugador (null en la salida o en la meta).
+export function currentLeaf(leaves, position) {
+  return position > 0 && position < leaves.length ? leaves[position - 1] : null;
+}
+
+// Devuelve { position, skipped, bonus, win }.
+export function applyMove(leaves, position, correct) {
+  const goal = leaves.length;
+  const leaf = currentLeaf(leaves, position);
+  let pos = position;
   let skipped = 0;
   let bonus = false;
-  const maxSteps = totalLeaves + 2;
 
-  for (let step = 0; step < maxSteps; step++) {
-    if (pos >= goal) {
-      return { position: goal, win: true, skipped, bonus };
-    }
-    if (pos < 0) pos = 0;
-    const leaf = leaves[pos - 1];
-    if (pos === 0 || leaf === 'green') break;
-    if (visited.has(pos)) break; // ya se activó en este movimiento
-    visited.add(pos);
-
-    if (leaf === 'purple') {
-      pos = Math.max(0, pos - 2);
-      break; // retroceso sin efectos encadenados
-    } else if (leaf === 'red') {
-      skipped += 2;
-      break;
-    } else if (leaf === 'blue') {
-      bonus = true;
-      break;
-    } else if (leaf === 'yellow') {
-      pos += 1; // impulso: puede encadenar otra hoja
-    }
+  if (correct) {
+    pos = Math.min(position + (leaf === 'yellow' ? 2 : 1), goal);
+    bonus = leaf === 'blue';
+  } else if (leaf === 'purple') {
+    pos = Math.max(0, position - 2);
+  } else if (leaf === 'red') {
+    skipped = 2;
   }
 
-  if (pos >= goal) return { position: goal, win: true, skipped, bonus };
-  if (pos < 0) pos = 0;
-  return { position: pos, win: false, skipped, bonus };
+  return { position: pos, skipped, bonus, win: pos >= goal };
 }
 
 // ---------------------------------------------------------------------------

@@ -5,7 +5,8 @@ import {
   shuffle,
   createDeck,
   drawQuestion,
-  resolveMove,
+  currentLeaf,
+  applyMove,
   findQuestion,
   computeStats,
 } from './gameLogic.js';
@@ -98,73 +99,81 @@ describe('shuffle y mazo', () => {
   });
 });
 
-describe('resolveMove', () => {
-  it('hoja verde: avanza una posición sin efectos', () => {
-    const leaves = ['green', 'green', 'green', 'green', 'green'];
-    expect(resolveMove(leaves, 1)).toEqual({ position: 1, win: false, skipped: 0, bonus: false });
+describe('currentLeaf', () => {
+  it('devuelve la hoja según la posición y null en la salida/meta', () => {
+    const leaves = ['green', 'purple', 'yellow', 'green'];
+    expect(currentLeaf(leaves, 0)).toBe(null); // salida
+    expect(currentLeaf(leaves, 1)).toBe('green');
+    expect(currentLeaf(leaves, 2)).toBe('purple');
+    expect(currentLeaf(leaves, 3)).toBe('yellow');
+    expect(currentLeaf(leaves, 4)).toBe(null); // meta
   });
+});
 
-  it('morada retrocede dos hojas, sin pasar de 0', () => {
-    const leaves = ['purple', 'green', 'green', 'green', 'green'];
-    expect(resolveMove(leaves, 1).position).toBe(0);
-    const leaves2 = ['green', 'purple', 'green', 'green', 'green'];
-    expect(resolveMove(leaves2, 2).position).toBe(0);
-  });
+describe('applyMove', () => {
+  const leaves = ['green', 'purple', 'red', 'blue', 'yellow', 'green']; // meta = 6
 
-  it('roja resta exactamente dos turnos', () => {
-    const leaves = ['green', 'red', 'green', 'green', 'green'];
-    const r = resolveMove(leaves, 2);
-    expect(r.skipped).toBe(2);
+  it('verde + correcta avanza una hoja', () => {
+    const r = applyMove(leaves, 1, true);
     expect(r.position).toBe(2);
-  });
-
-  it('azul concede una pregunta extra', () => {
-    const leaves = ['green', 'blue', 'green', 'green', 'green'];
-    const r = resolveMove(leaves, 2);
-    expect(r.bonus).toBe(true);
-    expect(r.position).toBe(2);
-  });
-
-  it('amarilla produce un avance adicional', () => {
-    const leaves = ['green', 'yellow', 'green', 'green', 'green'];
-    expect(resolveMove(leaves, 2).position).toBe(3);
-  });
-
-  it('amarilla encadena otra hoja especial', () => {
-    const leaves = ['green', 'yellow', 'blue', 'green', 'green'];
-    const r = resolveMove(leaves, 2);
-    expect(r.position).toBe(3);
-    expect(r.bonus).toBe(true);
-  });
-
-  it('encadenar varias amarillas termina y puede ganar', () => {
-    const leaves = ['green', 'yellow', 'yellow', 'yellow', 'green'];
-    const r = resolveMove(leaves, 2);
-    expect(r.win).toBe(true);
-    expect(r.position).toBe(5);
-  });
-
-  it('detecta la victoria al alcanzar o superar la meta', () => {
-    const leaves = ['green', 'green', 'green', 'green', 'green'];
-    expect(resolveMove(leaves, 5).win).toBe(true);
-    const leaves2 = ['green', 'green', 'green', 'yellow', 'green'];
-    expect(resolveMove(leaves2, 4).win).toBe(true);
-  });
-
-  it('el retroceso morado no activa efectos encadenados', () => {
-    // hoja 3 morada retrocede a la 1; la 1 es azul pero NO debe activarse
-    const leaves = ['blue', 'green', 'purple', 'green', 'green'];
-    const r = resolveMove(leaves, 3);
-    expect(r.position).toBe(1);
+    expect(r.skipped).toBe(0);
     expect(r.bonus).toBe(false);
+    expect(r.win).toBe(false);
   });
 
-  it('una misma hoja especial no se activa dos veces en un movimiento', () => {
-    // no hay ciclo posible, pero el guardián de visitados lo garantiza
-    const leaves = ['green', 'yellow', 'yellow', 'yellow', 'green'];
-    const r = resolveMove(leaves, 2);
-    expect(r.position).toBe(5); // termina, no itera indefinidamente
+  it('verde + incorrecta se queda quieto', () => {
+    const r = applyMove(leaves, 1, false);
+    expect(r.position).toBe(1);
+    expect(r.skipped).toBe(0);
+  });
+
+  it('morada + correcta avanza normal (sin efecto)', () => {
+    expect(applyMove(leaves, 2, true).position).toBe(3);
+  });
+
+  it('morada + incorrecta retrocede dos, sin pasar de 0', () => {
+    expect(applyMove(leaves, 2, false).position).toBe(0);
+  });
+
+  it('roja + correcta avanza normal', () => {
+    expect(applyMove(leaves, 3, true).position).toBe(4);
+  });
+
+  it('roja + incorrecta se queda y pierde dos turnos', () => {
+    const r = applyMove(leaves, 3, false);
+    expect(r.position).toBe(3);
+    expect(r.skipped).toBe(2);
+  });
+
+  it('azul + correcta concede pregunta extra', () => {
+    const r = applyMove(leaves, 4, true);
+    expect(r.position).toBe(5);
+    expect(r.bonus).toBe(true);
+  });
+
+  it('azul + incorrecta se queda', () => {
+    expect(applyMove(leaves, 4, false).position).toBe(4);
+  });
+
+  it('amarilla + correcta avanza dos hojas', () => {
+    const r = applyMove(leaves, 5, true);
+    expect(r.position).toBe(6);
     expect(r.win).toBe(true);
+  });
+
+  it('amarilla + incorrecta se queda', () => {
+    expect(applyMove(leaves, 5, false).position).toBe(5);
+  });
+
+  it('en la salida no hay efecto', () => {
+    expect(applyMove(leaves, 0, true).position).toBe(1);
+    expect(applyMove(leaves, 0, false).position).toBe(0);
+  });
+
+  it('detecta la victoria al llegar a la meta', () => {
+    const simple = ['green', 'green', 'green'];
+    expect(applyMove(simple, 2, true).win).toBe(true);
+    expect(applyMove(simple, 2, false).win).toBe(false);
   });
 });
 
@@ -237,32 +246,39 @@ describe('reducer de partida', () => {
     expect(s.phase).toBe('question');
   });
 
-  it('hoja roja descuenta dos turnos del jugador', () => {
+  it('fallar en hoja morada retrocede dos posiciones', () => {
     const q = findQuestion('easy_001');
-    const s = makeState({ leaves: ['green', 'red', 'green', 'green', 'green'], players: makeState().players.map((p, i) => ({ ...p, position: i === 0 ? 1 : 0 })) });
-    const next = gameReducer(s, { type: 'ANSWER', payload: { selectedIndex: q.correctAnswer } });
+    const wrong = (q.correctAnswer + 1) % 4;
+    const s = makeState({ leaves: ['green', 'purple', 'green', 'green', 'green'], players: makeState().players.map((p, i) => ({ ...p, position: i === 0 ? 2 : 0 })) });
+    const next = gameReducer(s, { type: 'ANSWER', payload: { selectedIndex: wrong } });
+    expect(next.players[0].position).toBe(0);
+  });
+
+  it('fallar en hoja roja resta dos turnos', () => {
+    const q = findQuestion('easy_001');
+    const wrong = (q.correctAnswer + 1) % 4;
+    const s = makeState({ leaves: ['green', 'red', 'green', 'green', 'green'], players: makeState().players.map((p, i) => ({ ...p, position: i === 0 ? 2 : 0 })) });
+    const next = gameReducer(s, { type: 'ANSWER', payload: { selectedIndex: wrong } });
     expect(next.players[0].position).toBe(2);
     expect(next.players[0].skippedTurns).toBe(2);
   });
 
-  it('hoja azul concede pregunta extra al mismo jugador', () => {
+  it('acertar en hoja azul concede pregunta extra', () => {
     const q = findQuestion('easy_001');
-    const s = makeState({ leaves: ['green', 'blue', 'green', 'green', 'green'], players: makeState().players.map((p, i) => ({ ...p, position: i === 0 ? 1 : 0 })) });
+    const s = makeState({ leaves: ['green', 'blue', 'green', 'green', 'green'], players: makeState().players.map((p, i) => ({ ...p, position: i === 0 ? 2 : 0 })) });
     let next = gameReducer(s, { type: 'ANSWER', payload: { selectedIndex: q.correctAnswer } });
     expect(next.bonusActive).toBe(true);
     next = gameReducer(next, { type: 'CONTINUE' });
-    expect(next.currentPlayer).toBe(0); // sigue el mismo jugador
+    expect(next.currentPlayer).toBe(0);
     expect(next.phase).toBe('question');
   });
 
-  it('registra la hoja destino para explicar el efecto', () => {
+  it('registra la hoja actual para explicar el efecto', () => {
     const q = findQuestion('easy_001');
-    const s = makeState({
-      leaves: ['green', 'purple', 'green', 'green', 'green'],
-      players: makeState().players.map((p, i) => ({ ...p, position: i === 0 ? 1 : 0 })),
-    });
-    const next = gameReducer(s, { type: 'ANSWER', payload: { selectedIndex: q.correctAnswer } });
-    expect(next.lastAnswer.landedOn).toBe('purple');
+    const wrong = (q.correctAnswer + 1) % 4;
+    const s = makeState({ leaves: ['green', 'purple', 'green', 'green', 'green'], players: makeState().players.map((p, i) => ({ ...p, position: i === 0 ? 2 : 0 })) });
+    const next = gameReducer(s, { type: 'ANSWER', payload: { selectedIndex: wrong } });
+    expect(next.lastAnswer.leaf).toBe('purple');
   });
 
   it('detecta la victoria', () => {
