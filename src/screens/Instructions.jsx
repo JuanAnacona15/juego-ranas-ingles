@@ -1,12 +1,12 @@
 import { LEAF_TYPES } from '../game/gameLogic.js';
 
 const STEPS = [
-  'Elige tu rana.',
-  'Selecciona la dificultad.',
-  'Responde preguntas de inglés.',
-  'Si aciertas, avanzas una hoja.',
-  'Descubre los efectos de las hojas especiales.',
-  '¡Llega primero a la meta!',
+  'Choose your frog.',
+  'Select the difficulty.',
+  'Answer English questions.',
+  'If you answer correctly, advance one leaf.',
+  'Discover the special leaf effects.',
+  'Be the first to reach the goal!',
 ];
 
 export default function Instructions({ onBack }) {
@@ -14,9 +14,9 @@ export default function Instructions({ onBack }) {
     <div className="screen">
       <header className="screen-header">
         <button className="btn btn-ghost" onClick={onBack}>
-          ← VOLVER
+          ← BACK
         </button>
-        <h1>Cómo jugar</h1>
+        <h1>How to Play</h1>
       </header>
 
       <div className="instructions">
@@ -26,7 +26,7 @@ export default function Instructions({ onBack }) {
           ))}
         </ol>
 
-        <h2>Tipos de hoja</h2>
+        <h2>Leaf types</h2>
         <div className="leaf-legend">
           {Object.values(LEAF_TYPES).map((t) => (
             <div key={t.key} className={`leaf-legend-item ${t.key}`}>
@@ -48,7 +48,7 @@ export default function Instructions({ onBack }) {
 
         <div className="screen-actions">
           <button className="btn btn-primary" onClick={onBack}>
-            ENTENDIDO
+            GOT IT
           </button>
         </div>
       </div>

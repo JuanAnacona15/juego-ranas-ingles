@@ -255,6 +255,16 @@ describe('reducer de partida', () => {
     expect(next.phase).toBe('question');
   });
 
+  it('registra la hoja destino para explicar el efecto', () => {
+    const q = findQuestion('easy_001');
+    const s = makeState({
+      leaves: ['green', 'purple', 'green', 'green', 'green'],
+      players: makeState().players.map((p, i) => ({ ...p, position: i === 0 ? 1 : 0 })),
+    });
+    const next = gameReducer(s, { type: 'ANSWER', payload: { selectedIndex: q.correctAnswer } });
+    expect(next.lastAnswer.landedOn).toBe('purple');
+  });
+
   it('detecta la victoria', () => {
     const q = findQuestion('easy_001');
     const s = makeState({ players: makeState().players.map((p, i) => ({ ...p, position: i === 0 ? 4 : 0 })) });

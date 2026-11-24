@@ -98,12 +98,15 @@ function handleAnswer(state, selectedIndex) {
   let bonusActive = false;
   let winner = null;
   let status = state.status;
+  let landedOn = null;
 
   if (correct) {
-    const res = resolveMove(state.leaves, player.position + 1);
+    const oldPos = player.position;
+    const res = resolveMove(state.leaves, oldPos + 1);
     player.position = res.position;
     player.skippedTurns += res.skipped;
     bonusActive = res.bonus;
+    landedOn = res.win ? 'goal' : state.leaves[oldPos];
     if (res.win) {
       winner = player.id;
       status = 'finished';
@@ -117,7 +120,7 @@ function handleAnswer(state, selectedIndex) {
     players,
     phase: 'feedback',
     questionAnswered: true,
-    lastAnswer: { selectedIndex, correct, correctIndex: q.correctAnswer },
+    lastAnswer: { selectedIndex, correct, correctIndex: q.correctAnswer, landedOn },
     bonusActive,
     penaltyMessage: null,
   };

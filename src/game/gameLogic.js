@@ -31,11 +31,11 @@ export const DIFFICULTIES = {
 // Tipos de hoja
 // ---------------------------------------------------------------------------
 export const LEAF_TYPES = {
-  green: { key: 'green', label: 'Normal', color: '#65BD48', effect: 'Sin efecto.' },
-  purple: { key: 'purple', label: 'Trampa', color: '#A66DD4', effect: 'Retrocede dos hojas.' },
-  red: { key: 'red', label: 'Penalización', color: '#ED6464', effect: 'Pierde los dos próximos turnos.' },
-  blue: { key: 'blue', label: 'Bonus', color: '#65C7E8', effect: 'Responde una pregunta extra.' },
-  yellow: { key: 'yellow', label: 'Impulso', color: '#FFD45C', effect: 'Avanza una hoja adicional.' },
+  green: { key: 'green', label: 'Normal', color: '#65BD48', effect: 'No effect.' },
+  purple: { key: 'purple', label: 'Trap', color: '#A66DD4', effect: 'Go back two leaves.' },
+  red: { key: 'red', label: 'Penalty', color: '#ED6464', effect: 'Lose your next two turns.' },
+  blue: { key: 'blue', label: 'Bonus', color: '#65C7E8', effect: 'Answer one extra question.' },
+  yellow: { key: 'yellow', label: 'Boost', color: '#FFD45C', effect: 'Advance one extra leaf.' },
 };
 
 // ---------------------------------------------------------------------------

@@ -971,6 +971,16 @@ body {
   line-height: 1.4;
 }
 
+.feedback-leaf {
+  font-weight: 700;
+  margin: 0 0 12px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: #fff7e0;
+  border: 2px solid var(--amarillo);
+  color: #7a5a00;
+}
+
 .feedback .btn {
   width: 100%;
 }

@@ -88,6 +88,15 @@ export default function QuestionCard({ state, activePlayer, onAnswer, onContinue
             </p>
           )}
           <p className="feedback-explanation">{currentQuestion.explanation}</p>
+          {lastAnswer.correct && lastAnswer.landedOn && (
+            <p className="feedback-leaf">
+              {lastAnswer.landedOn === 'purple' && '🟣 Caíste en una hoja morada (trampa): retrocedes 2 hojas.'}
+              {lastAnswer.landedOn === 'red' && '🔴 Caíste en una hoja roja: pierdes tus próximos 2 turnos.'}
+              {lastAnswer.landedOn === 'blue' && '🔵 ¡Hoja azul (bonus)! Responde una pregunta extra.'}
+              {lastAnswer.landedOn === 'yellow' && '🟡 ¡Hoja amarilla (impulso)! Avanzas una hoja extra.'}
+              {lastAnswer.landedOn === 'goal' && '🏁 ¡Llegaste a la meta!'}
+            </p>
+          )}
           <button className="btn btn-primary" onClick={onContinue}>
             CONTINUAR
           </button>
